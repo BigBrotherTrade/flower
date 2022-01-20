@@ -1,6 +1,7 @@
 #include <iostream>
 #include "fmt/format.h"
 #include <thread>
+#include <unistd.h>
 #include <sw/redis++/redis++.h>
 #include "WXBizMsgCrypt.h"
 #include "json.hpp"
@@ -86,5 +87,8 @@ int main() {
         wxcpt.EncryptMsg(sResMsgXML, sReqTimeStamp, sReqNonce, sEncryptMsg);
         res.set_content(sEncryptMsg, "text/xml");
     });
+
+    cout << "小花正在守护着你！" << endl;
+    if ( daemon(0, 0) ) return 1;
     svr.listen("::", 19860);
 }

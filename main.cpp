@@ -19,7 +19,7 @@ int main() {
     string sToken = *( redis.hget("WEIXIN:BIGBROTHER", "Token") );
     string sEncodingAESKey = *( redis.hget("WEIXIN:BIGBROTHER", "EncodingAESKey") );
     string sCorpID = *( redis.hget("WEIXIN:BIGBROTHER", "CorpID") );
-    string sSecret = *( redis.hget("WEIXIN:BIGBROTHER", "sSecret") );
+    string sSecret = *( redis.hget("WEIXIN:BIGBROTHER", "Secret") );
     Tencent::WXBizMsgCrypt wxcpt(sToken, sEncodingAESKey, sCorpID);
 
     Subscriber subscriber = redis.subscriber();
@@ -89,6 +89,6 @@ int main() {
     });
 
     cout << "小花正在守护着你！" << endl;
-    if ( daemon(0, 0) ) return 1;
+//    if ( daemon(0, 0) ) return 1;
     svr.listen("::", 19860);
 }

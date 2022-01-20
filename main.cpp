@@ -89,6 +89,6 @@ int main() {
     });
 
     cout << "小花正在守护着你！" << endl;
-//    if ( daemon(0, 0) ) return 1;
+    if ( daemon(0, 0) ) return 1;
     svr.listen("::", 19860);
 }

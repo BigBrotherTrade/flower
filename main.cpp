@@ -15,6 +15,8 @@ using namespace sw::redis;
 using json = nlohmann::json;
 
 int main() {
+    cout << "小花正在守护着你！" << endl;
+    if ( daemon(0, 0) ) return 1;
     Redis redis = Redis("tcp://127.0.0.1");
     string sToken = *( redis.hget("WEIXIN:BIGBROTHER", "Token") );
     string sEncodingAESKey = *( redis.hget("WEIXIN:BIGBROTHER", "EncodingAESKey") );
@@ -88,7 +90,5 @@ int main() {
         res.set_content(sEncryptMsg, "text/xml");
     });
 
-    cout << "小花正在守护着你！" << endl;
-    if ( daemon(0, 0) ) return 1;
     svr.listen("::", 19860);
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "fmt/format.h"
 #include <thread>
+#include <ranges>
+#include <string_view>
 #include <unistd.h>
 #include <sw/redis++/redis++.h>
 #include "WXBizMsgCrypt.h"
@@ -44,7 +46,16 @@ int main() {
         jsonSend["touser"] = "@all";
         jsonSend["msgtype"] = "text";
         jsonSend["agentid"] = 0;
-        jsonSend["text"]["content"] = msg;
+        auto msg_split = msg | std::views::split(' ')
+                | ranges::views::transform([](const auto rng){ return std::string_view(rng.begin(), rng.end());});
+        string markdown;
+        for (auto split : msg_split) {
+            if (split == msg_split.front())
+                markdown.append(format("{}", split));
+            else
+                markdown.append(format("\n{}", split));
+        }
+        jsonSend["text"]["content"] = markdown;
         cli.Post( format("/cgi-bin/message/send?access_token={}", token).c_str(), jsonSend.dump(), "text/json");
     });
 
